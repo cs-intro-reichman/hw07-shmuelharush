@@ -1,60 +1,60 @@
 /** Computes the binomial(n,k) function. */
-public class Binomial {	
+public class Binomial { 
     public static void main(String[] args) {
-		//// Uncomment the version of binomial that you want to test
- 
-		// Testing the basic binomial implementation:
-    	// System.out.println(binomial1(Integer.parseInt(args[0]), Integer.parseInt(args[1])));
-
-		// Testing the optimized binomial implementation:
-		// System.out.println(binomial(Integer.parseInt(args[0]), Integer.parseInt(args[1])));
-	}
-
-	// Computes the Binomial function, basic version.
-	public static int binomial1(int n, int k) { 
-		// מקרי בסיס
-		if(k==0 || n==k){
-			return 1;
-		}
-		if(k>n){
-			return 0;
-		}
-		//צעד האינדוקציה
-		return binomial(n-1, k-1) + binomial(n-1, k);
-	 }
-	
-	// Computes the Binomial function, efficiently
-	public static int binomial(int n, int k) {
-
-		int[][] memo = new int[n + 1][k + 1];
-
-    // שלב 2: מילוי המערך ב- -1
-    for (int i = 0; i <= n; i++) {
-        for (int j = 0; j <= k; j++) {
-            memo[i][j] = -1;
+        // מומלץ להשתמש ב-Long.parseLong במקום Integer אם הקלט מאוד גדול, 
+        // אבל לארגומנטים n ו-k עצמם int זה מספיק.
+        if (args.length >= 2) {
+             System.out.println(binomial(Integer.parseInt(args[0]), Integer.parseInt(args[1])));
         }
     }
-		return binomial(n, k, memo);
-	}
 
-	private static int binomial(int n, int k, int[][] memo) {
-		if (memo[n][k] != -1) {
-			return memo[n][k];
-		}
-		// מקרה בסיס
-		if ((k > n)) {
-		   	memo[n][k] = 0; 
-		   	return 0;
-		}
-		// מקרה בסיס 2 
-		if (n == 0 || k == 0) {
-		   	memo[n][k] = 1; 
-		   	return 1;
-		}
-		memo[n][k] = binomial(n - 1, k, memo) + binomial(n - 1, k - 1, memo);
-		return memo[n][k];
-	}
+    // Computes the Binomial function, basic version.
+    // שיניתי ל-long כדי שיוכל להחזיר ערכים גדולים
+    public static long binomial1(int n, int k) { 
+        if (k == 0 || n == k) {
+            return 1;
+        }
+        if (k > n || k < 0) {
+            return 0;
+        }
+        return binomial1(n - 1, k - 1) + binomial1(n - 1, k);
+    }
+    
+    // Computes the Binomial function, efficiently
+    public static long binomial(int n, int k) {
+        if (k > n || k < 0) return 0;
+        if (k == 0 || n == k) return 1;
+
+        // שימוש במערך מסוג long
+        long[][] memo = new long[n + 1][k + 1];
+
+        // מילוי המערך ב- -1
+        for (int i = 0; i <= n; i++) {
+            for (int j = 0; j <= k; j++) {
+                memo[i][j] = -1;
+            }
+        }
+        return binomial(n, k, memo);
+    }
+
+    // פונקציית העזר משתמשת ב-long
+    private static long binomial(int n, int k, long[][] memo) {
+        // אם כבר חישבנו - החזר מהזיכרון
+        if (memo[n][k] != -1) {
+            return memo[n][k];
+        }
+        
+        // מקרי בסיס
+        if (k == 0 || n == k) {
+            memo[n][k] = 1;
+            return 1;
+        }
+        if (k > n || k < 0) {
+            return 0;
+        }
+
+        // חישוב רקורסיבי ושמירה בזיכרון
+        memo[n][k] = binomial(n - 1, k, memo) + binomial(n - 1, k - 1, memo);
+        return memo[n][k];
+    }
 }
-
-
-
