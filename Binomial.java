@@ -12,29 +12,41 @@ public class Binomial {
 
 	// Computes the Binomial function, basic version.
 	public static int binomial1(int n, int k) { 
-		//// Repplace the following comment with your code
-		return 0;
+		// מקרי בסיס
+		if(k==0 || n==k){
+			return 1;
+		}
+		if(k>n){
+			return 0;
+		}
+		//צעד האינדוקציה
+		return binomial(n-1, k-1) + binomial(n-1, k);
 	 }
 	
 	// Computes the Binomial function, efficiently
 	public static int binomial(int n, int k) {
-		//// This function creates a 2D array, say memo, 
-		//// and then initializes all its elements to -1.
-		//// It then calls binomial(n, k, memo), which does all the heavy lifiting.
-		//// Replace the following statement with your code.
-		return 0;
+
+		int[][] memo = new int[n + 1][k + 1];
+
+    // שלב 2: מילוי המערך ב- -1
+    for (int i = 0; i <= n; i++) {
+        for (int j = 0; j <= k; j++) {
+            memo[i][j] = -1;
+        }
+    }
+		return binomial(n, k, memo);
 	}
 
 	private static int binomial(int n, int k, int[][] memo) {
 		if (memo[n][k] != -1) {
 			return memo[n][k];
 		}
-		// Base case
+		// מקרה בסיס
 		if ((k > n)) {
 		   	memo[n][k] = 0; 
 		   	return 0;
 		}
-		// Another base case
+		// מקרה בסיס 2 
 		if (n == 0 || k == 0) {
 		   	memo[n][k] = 1; 
 		   	return 1;
